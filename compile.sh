@@ -9,6 +9,7 @@ iree-compile base_ir/generated_unet.mlir \
     --iree-rocm-link-bc=true \
     --iree-codegen-llvmgpu-use-vector-distribution \
     --iree-rocm-bc-dir=/opt/rocm/amdgcn/bitcode \
+    --iree-execution-model=async-external \
     --iree-hal-dump-executable-configurations-to=configurations \
     --iree-hal-dump-executable-sources-to=sources \
     --iree-hal-dump-executable-binaries-to=binaries \
@@ -19,13 +20,15 @@ iree-compile base_ir/generated_unet.mlir \
     --mlir-disable-threading \
     -o tmp/unet.vmfb
 
-iree-run-module \
+iree-benchmark-module \
     --module=tmp/unet.vmfb \
-    --device=rocm \
+    --device=rocm://5 \
     --function=main \
+    --parameters=model=tmp/unet.irpa \
     --input=1x4x128x128xf16 \
     --input=1xi64 \
     --input=2x64x2048xf16 \
     --input=2x1280xf16 \
     --input=2x6xf16 \
-    --input=1xf16
+    --input=1xf16 \
+    --device_allocator=caching
