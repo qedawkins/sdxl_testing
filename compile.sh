@@ -1,0 +1,31 @@
+iree-compile base_ir/generated_unet.mlir \
+    --iree-vulkan-target-triple=rdna3-unknown-linux \
+    --iree-llvmcpu-target-triple=x86_64-unknown-linux \
+    --iree-hal-cuda-llvm-target-arch=sm_80 \
+    --iree-rocm-target-chip=gfx942 \
+    --iree-hal-target-backends=rocm \
+    --iree-global-opt-propagate-transposes=true \
+    --iree-opt-outer-dim-concat=true \
+    --iree-rocm-link-bc=true \
+    --iree-codegen-llvmgpu-use-vector-distribution \
+    --iree-rocm-bc-dir=/opt/rocm/amdgcn/bitcode \
+    --iree-hal-dump-executable-configurations-to=configurations \
+    --iree-hal-dump-executable-sources-to=sources \
+    --iree-hal-dump-executable-binaries-to=binaries \
+    --iree-hal-dump-executable-benchmarks-to=benchmarks \
+    --iree-opt-splat-parameter-archive-export-file=tmp/unet.irpa \
+    --iree-preprocessing-pass-pipeline="builtin.module(iree-preprocessing-transpose-convolution-pipeline)" \
+    --iree-codegen-transform-dialect-library=specs/attention_mfma_transform_64_spec.mlir \
+    --mlir-disable-threading \
+    -o tmp/unet.vmfb
+
+iree-run-module \
+    --module=tmp/unet.vmfb \
+    --device=rocm \
+    --function=main \
+    --input=1x4x128x128xf16 \
+    --input=1xi64 \
+    --input=2x64x2048xf16 \
+    --input=2x1280xf16 \
+    --input=2x6xf16 \
+    --input=1xf16
