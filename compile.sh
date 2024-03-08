@@ -1,4 +1,5 @@
-iree-compile base_ir/generated_unet.mlir \
+# iree-compile base_ir/generated_unet.mlir \
+iree-compile base_ir/scheduled.mlir \
     --iree-vulkan-target-triple=rdna3-unknown-linux \
     --iree-llvmcpu-target-triple=x86_64-unknown-linux \
     --iree-hal-cuda-llvm-target-arch=sm_80 \
@@ -18,7 +19,8 @@ iree-compile base_ir/generated_unet.mlir \
     --iree-preprocessing-pass-pipeline="builtin.module(iree-preprocessing-transpose-convolution-pipeline)" \
     --iree-codegen-transform-dialect-library=specs/attention_mfma_transform_64_spec.mlir \
     --mlir-disable-threading \
-    -o tmp/unet.vmfb
+    -o tmp/scheduled_unet.vmfb
+    #-o tmp/unet.vmfb
 
 iree-benchmark-module \
     --module=tmp/unet.vmfb \
