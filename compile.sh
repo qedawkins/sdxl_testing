@@ -1,5 +1,5 @@
 # iree-compile base_ir/generated_unet.mlir \
-iree-compile base_ir/scheduled.mlir \
+iree-compile base_ir/scheduled_unet.mlir \
     --iree-vulkan-target-triple=rdna3-unknown-linux \
     --iree-llvmcpu-target-triple=x86_64-unknown-linux \
     --iree-hal-cuda-llvm-target-arch=sm_80 \
