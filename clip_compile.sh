@@ -1,0 +1,17 @@
+iree-compile base_ir/clip_1.mlir \
+    --iree-vulkan-target-triple=rdna3-unknown-linux \
+    --iree-llvmcpu-target-triple=x86_64-unknown-linux \
+    --iree-hal-cuda-llvm-target-arch=sm_80 \
+    --iree-rocm-target-chip=gfx942 \
+    --iree-hal-target-backends=rocm \
+    --iree-global-opt-only-sink-transposes=true \
+    --iree-global-opt-propagate-transposes=true \
+    --iree-opt-outer-dim-concat=true \
+    --iree-rocm-link-bc=true \
+    --iree-rocm-bc-dir=/opt/rocm/amdgcn/bitcode \
+    --iree-execution-model=async-external \
+    --iree-opt-splat-parameter-archive-export-file=tmp/clip.irpa \
+    --iree-llvmgpu-shared-memory-limit=65536 \
+    --iree-preprocessing-pass-pipeline="builtin.module(iree-preprocessing-transpose-convolution-pipeline)" \
+    --mlir-disable-threading \
+    -o tmp/clip.vmfb

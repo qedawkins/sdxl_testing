@@ -1,6 +1,6 @@
 iree-compile base_ir/matmul_fused.mlir \
     --iree-llvmcpu-target-triple=x86_64-unknown-linux \
-    --iree-rocm-target-chip=gfx1100 \
+    --iree-rocm-target-chip=gfx942 \
     --iree-hal-target-backends=rocm \
     --iree-codegen-llvmgpu-use-vector-distribution \
     --iree-rocm-link-bc=true \

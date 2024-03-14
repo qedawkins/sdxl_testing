@@ -1,5 +1,5 @@
-# iree-compile base_ir/generated_unet.mlir \
-iree-compile base_ir/scheduled_unet.mlir \
+#iree-compile base_ir/scheduled_unet.mlir \
+iree-compile base_ir/generated_unet.mlir \
     --iree-vulkan-target-triple=rdna3-unknown-linux \
     --iree-llvmcpu-target-triple=x86_64-unknown-linux \
     --iree-hal-cuda-llvm-target-arch=sm_80 \
@@ -17,10 +17,14 @@ iree-compile base_ir/scheduled_unet.mlir \
     --iree-hal-dump-executable-benchmarks-to=benchmarks \
     --iree-opt-splat-parameter-archive-export-file=tmp/unet.irpa \
     --iree-preprocessing-pass-pipeline="builtin.module(iree-preprocessing-transpose-convolution-pipeline)" \
-    --iree-codegen-transform-dialect-library=specs/attention_mfma_transform_64_spec.mlir \
+    --iree-codegen-transform-dialect-library=specs/attention_and_matmul_spec.mlir \
     --mlir-disable-threading \
-    -o tmp/scheduled_unet.vmfb
-    #-o tmp/unet.vmfb
+    -o tmp/unet.mlir
+    #--mlir-print-ir-after=iree-stream-schedule-concurrency \
+    #--iree-global-opt-only-sink-transposes=true \
+    #--compile-to=global-optimization \
+    #-o tmp/unet.mlir
+    #-o tmp/scheduled_unet.vmfb
 
 iree-benchmark-module \
     --module=tmp/unet.vmfb \
