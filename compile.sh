@@ -19,7 +19,7 @@ iree-compile base_ir/generated_unet.mlir \
     --iree-preprocessing-pass-pipeline="builtin.module(iree-preprocessing-transpose-convolution-pipeline)" \
     --iree-codegen-transform-dialect-library=specs/attention_and_matmul_spec.mlir \
     --mlir-disable-threading \
-    -o tmp/unet.mlir
+    -o tmp/unet.vmfb
     #--mlir-print-ir-after=iree-stream-schedule-concurrency \
     #--iree-global-opt-only-sink-transposes=true \
     #--compile-to=global-optimization \
