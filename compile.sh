@@ -15,11 +15,11 @@ iree-compile base_ir/generated_unet.mlir \
     --iree-hal-dump-executable-sources-to=sources \
     --iree-hal-dump-executable-binaries-to=binaries \
     --iree-hal-dump-executable-benchmarks-to=benchmarks \
-    --iree-opt-splat-parameter-archive-export-file=tmp/unet.irpa \
-    --iree-preprocessing-pass-pipeline="builtin.module(iree-preprocessing-transpose-convolution-pipeline)" \
+    --iree-preprocessing-pass-pipeline="builtin.module(iree-preprocessing-transpose-convolution-pipeline, iree-preprocessing-pad-to-intrinsics)" \
     --iree-codegen-transform-dialect-library=specs/attention_and_matmul_spec.mlir \
     --mlir-disable-threading \
     -o tmp/unet.vmfb
+    #--iree-codegen-llvmgpu-use-conv-vector-distribute-pipeline=true \
     #--mlir-print-ir-after=iree-stream-schedule-concurrency \
     #--iree-global-opt-only-sink-transposes=true \
     #--compile-to=global-optimization \
